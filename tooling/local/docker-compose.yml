@@ -1,0 +1,14 @@
+version: '2'
+services:
+  mongo:
+    image: 'mongo:4.0'
+    container_name: 'test'
+    mem_limit: 512M
+    ports:
+    - "27417:27017"
+    volumes:
+    - ./.data/mongo/data:/data/db
+    logging:
+      driver: json-file
+      options:
+        max-size: 1k
