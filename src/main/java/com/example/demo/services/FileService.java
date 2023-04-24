@@ -9,7 +9,10 @@ import com.example.demo.parser.excel.ExcelParserContext;
 import com.example.demo.repositories.FileDataRepository;
 import com.example.demo.repositories.FileRecordsRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +30,18 @@ public class FileService {
 
     @Autowired
     private FileRecordsRepository fileRecordsRepository;
+
+    @Autowired
+    private AmqpTemplate rabbitTemplate;
+
+    @Value("${rabbitmq.exchange}")
+    private String exchange;
+    @Value("${rabbitmq.routingkey}")
+    private String routingkey;
+
+    public void send(final String data){
+        rabbitTemplate.convertAndSend(exchange, routingkey, data);
+    }
 
     public void uploadFile(MultipartFile file){
         String fileId = "";

@@ -24,4 +24,9 @@ public class TestResource {
         fileService.uploadFile(file);
     }
 
+    @GetMapping("/rabbitmq")
+    public void rabbitMq(){
+        fileService.send("This is a test");
+    }
+
 }
